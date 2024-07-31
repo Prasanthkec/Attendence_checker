@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+import xlrd
 # Function to process the attendance data
 def process_attendance(df):
     # required_columns = ['Email ID', 'EmpID', 'Status', 'Hours']
@@ -9,17 +9,22 @@ def process_attendance(df):
     #     return None
 
     def process_row(row):
-        if row['status'] == 'Pending' or row['Hours_worked'] < 40:
-            return 'Action Required'
+        if row['State'] == 'Submitted':
+            return 'Action Required Status still in Submitted'
+        elif row['State'] == 'Pending' :
+            return 'Action Required status Pending'
+        elif row['Total Hours'] < 40:
+            return 'Action Required Hours less than 40'
         return 'No Action'
 
     df['Action'] = df.apply(process_row, axis=1)
-    return df
+    Action_req_df = df[df['Action'].str.contains('Action Required')]
+    return Action_req_df
 
 # Streamlit app
 st.title("Attendance Dashboard")
 
-uploaded_file = st.file_uploader("Upload your attendance Excel file", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload your attendance Excel file", type=["xls", "xlsx"])
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
