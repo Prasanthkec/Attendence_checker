@@ -71,7 +71,7 @@ if uploaded_file is not None:
     start_of_previous_week = start_of_week - timedelta(days=7)
     print('start_of_previous_week',start_of_previous_week)
     current_week_df = df[df['Week starts on']==start_of_week ]
-    previous_week_df = df[df['Week starts on']<=start_of_previous_week]
+    previous_week_df = df[df['Week starts on']==start_of_previous_week]
     previous_week_processed_df = process_previous_week_attendance(previous_week_df)
     current_week_processed_df = process_current_week_attendance(current_week_df)
 
